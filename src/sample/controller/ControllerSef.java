@@ -22,8 +22,7 @@ import java.util.stream.StreamSupport;
 public class ControllerSef implements Observer<Issue> {
     @FXML
     TableView tableIssue;
-    @FXML
-    TableView tableDev;
+    //cu coloanele
     @FXML
     TableColumn columnSummary;
     @FXML
@@ -38,31 +37,41 @@ public class ControllerSef implements Observer<Issue> {
     TableColumn columnStatus;
     @FXML
     TableColumn columnDate;
+
+    @FXML
+    TableView tableDev;
+    //cu coloana
     @FXML
     TableColumn columnName;
+    //for creating issues
     @FXML
     TextField txtSummary;
     @FXML
     TextField txtDesc;
-    private User user= null;
+
+    //windows owner
+    private User user = null;
 
     private ServiceIssue serviceIssue;
     private ServiceUser serviceUser;
     private ObservableList<Issue> model;
     private ObservableList<User> modelUser;
 
-    public void setUser(User user){this.user=user;}
-    public void setServiceUser(ServiceUser serviceUser){
-        this.serviceUser=serviceUser;
-        ArrayList<User> m=new ArrayList<>();
-        for(User user: serviceUser.getAll())
-            if(user.getType().equals(UserType.Dev))
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setServiceUser(ServiceUser serviceUser) {
+        this.serviceUser = serviceUser;
+        ArrayList<User> m = new ArrayList<>();
+        for (User user : serviceUser.getAll())
+            if (user.getType().equals(UserType.Dev))
                 m.add(user);
-        modelUser=FXCollections.observableArrayList(m);
+        modelUser = FXCollections.observableArrayList(m);
         tableDev.setItems(FXCollections.observableArrayList(modelUser));
     }
 
-    public void setServiceIssue(ServiceIssue serviceIssue)  {
+    public void setServiceIssue(ServiceIssue serviceIssue) {
         this.serviceIssue = serviceIssue;
         serviceIssue.addObserver(this);
         model = FXCollections.observableArrayList(serviceIssue.getAll());
@@ -83,7 +92,7 @@ public class ControllerSef implements Observer<Issue> {
         columnRegistered.setCellValueFactory(new PropertyValueFactory<Issue, String>("registeredBy"));
         columnDate.setCellValueFactory(new PropertyValueFactory<Issue, String>("registerDate"));
 
-        columnName.setCellValueFactory(new PropertyValueFactory<User,String>("nume"));
+        columnName.setCellValueFactory(new PropertyValueFactory<User, String>("nume"));
     }
 
     @Override
@@ -91,15 +100,26 @@ public class ControllerSef implements Observer<Issue> {
         model.setAll(StreamSupport.stream(e.getList().spliterator(), false)
                 .collect(Collectors.toList()));
     }
+
+    /**
+     * expected behaviour:
+     * complete the text fields of abose , chose a dev from devs table and click the button to add an unassigned task
+     * @param event
+     */
     public void registerTask(MouseEvent event) {
-        Issue task=new Issue(serviceIssue.size()+1,txtSummary.getText(),txtDesc.getText(),
-                IssueType.Task,"",user.getNume(),Status.Open,
+        Issue task = new Issue(serviceIssue.size() + 1, txtSummary.getText(), txtDesc.getText(),
+                IssueType.Task, "", user.getNume(), Status.Open,
                 LocalDate.now().toString());
         serviceIssue.save(task);
     }
+
+    /*
+        expected behaviour:
+        select an issue from issues table, a dev from devs table and click the button to assign the issue to dev
+     */
     public void assignTaskBug(MouseEvent event) {
-        Issue issue=(Issue)tableIssue.getSelectionModel().getSelectedItem();
-        User dev=(User)tableDev.getSelectionModel().getSelectedItem();
+        Issue issue = (Issue) tableIssue.getSelectionModel().getSelectedItem();
+        User dev = (User) tableDev.getSelectionModel().getSelectedItem();
         issue.setAssignTo(dev.getNume());
         serviceIssue.put(issue);
     }

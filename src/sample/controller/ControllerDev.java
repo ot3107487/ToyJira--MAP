@@ -14,7 +14,6 @@ import sample.domain.Status;
 import sample.domain.User;
 import sample.service.ServiceIssue;
 import sample.utils.ListEvent;
-import sample.utils.ListEventType;
 import sample.utils.Observer;
 
 import java.util.stream.Collectors;
@@ -38,10 +37,7 @@ public class ControllerDev implements Observer<Issue> {
     TableColumn columnStatus;
     @FXML
     TableColumn columnDate;
-    @FXML
-    TextField txtSummary;
-    @FXML
-    TextField txtDesc;
+
     private User user = null;
 
     private ServiceIssue serviceIssue;
@@ -73,12 +69,16 @@ public class ControllerDev implements Observer<Issue> {
         columnDate.setCellValueFactory(new PropertyValueFactory<Issue, String>("registerDate"));
     }
 
+
     @Override
     public void notifyEvent(ListEvent<Issue> e) {
         model.setAll(StreamSupport.stream(e.getList().spliterator(), false)
                 .collect(Collectors.toList()));
     }
-
+    /*
+    expected behaviour:
+    select an issues from issues table and click the button to set its status to CLOSED
+     */
     public void completeTask(MouseEvent event) {
         Issue issue=(Issue)table.getSelectionModel().getSelectedItem();
         if(issue.getAssignTo().equals(user.getNume())){

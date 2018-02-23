@@ -12,7 +12,6 @@ import sample.domain.Status;
 import sample.domain.User;
 import sample.service.ServiceIssue;
 import sample.utils.ListEvent;
-import sample.utils.ListEventType;
 import sample.utils.Observer;
 
 import java.time.LocalDate;
@@ -36,18 +35,22 @@ public class ControllerTester implements Observer<Issue> {
     TableColumn columnStatus;
     @FXML
     TableColumn columnDate;
+
+
     @FXML
     TextField txtSummary;
     @FXML
     TextField txtDesc;
-    private User user= null;
+    private User user = null;
 
     private ServiceIssue serviceIssue;
     private ObservableList<Issue> model;
 
-    public void setUser(User user){this.user=user;}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public void setServiceIssue(ServiceIssue serviceIssue)  {
+    public void setServiceIssue(ServiceIssue serviceIssue) {
         this.serviceIssue = serviceIssue;
         serviceIssue.addObserver(this);
         model = FXCollections.observableArrayList(serviceIssue.getAll());
@@ -73,11 +76,14 @@ public class ControllerTester implements Observer<Issue> {
     public void notifyEvent(ListEvent<Issue> e) {
         model.setAll(StreamSupport.stream(e.getList().spliterator(), false)
                 .collect(Collectors.toList()));
-        }
-
+    }
+    /*
+        expected behaviour:
+        complete the textfields above and click the button to add a new unassigned issue with "now" as registerDate
+     */
     public void registerBug(MouseEvent event) {
-        Issue bug=new Issue(serviceIssue.size()+1,txtSummary.getText(),txtDesc.getText(),
-                IssueType.Bug,"",user.getNume(),Status.Open,
+        Issue bug = new Issue(serviceIssue.size() + 1, txtSummary.getText(), txtDesc.getText(),
+                IssueType.Bug, "", user.getNume(), Status.Open,
                 LocalDate.now().toString());
         serviceIssue.save(bug);
     }
