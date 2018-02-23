@@ -1,0 +1,10 @@
+1;s1;d1;Bug;golan;t;Closed;azi
+2;s1;d1;Bug;bogdan;t;Closed;azi
+3;s1;d1;Bug;;t;Closed;azi
+4;s1;d1;Bug;golan;t;Closed;azi
+5;s1;d1;Bug;;t;Closed;azi
+8;sad;sad;Bug;;t;Closed;2018-02-23
+9;sda;asdsa;Bug;;bos;Closed;2018-02-23
+8;dsf;asd;Bug;;t;Closed;2018-02-23
+9;issue nou;issue;Bug;bogdan;bos;Closed;2018-02-23
+10;bug tester;tester;Bug;;t;Closed;2018-02-23
